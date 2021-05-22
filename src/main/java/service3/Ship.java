@@ -135,7 +135,7 @@ public class Ship
         Cargo cargo = Cargo.createCargo();
         int arrivalTime = rand.nextInt(maxMinutes);
         String month = "June";
-        int day = 0;
+        int day = 1;
         int hoursInADay= 0;
         int minutesInADay = 0;
         cranePerformance = switch (cargo.getCargoType())

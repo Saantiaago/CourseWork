@@ -9,10 +9,10 @@ import java.util.Random;
 
 public class ScheduleCreation
 {
-    public static String month = "June";
+//    public static String month = "June";
     List<Ship> schedule;
     Random rand = new Random();
-    public int iterationsNumber = 30;
+    public int iterationsNumber = 200;
     public void createSchedule()
     {
         schedule = new ArrayList<Ship>();
@@ -22,68 +22,68 @@ public class ScheduleCreation
             int maxDelay = 10080;
             int minDelay = -10080;
             int day = 0;
-            int hoursInADay = 0;
-            int minutesInADay = 0;
+            int hours, minutes, hoursInADay = 24, minutesInAnHour = 60;
             String month = "";
             int arrDelay = rand.nextInt(maxDelay - minDelay) + minDelay;
             int arrivalTime = ship.getArrivalTime() + arrDelay;
-            int delayInHours = (ship.getArrivalTime() + arrDelay)/60;
+            int delayInHours = (ship.getArrivalTime() + arrDelay)/minutesInAnHour;
             ship.setArrivalTimeInHours(delayInHours);
             ship.setArrivalTime(arrivalTime);
+            int totalMonthMinutes = 43200;
             if (arrivalTime < 0)
             {
                 month = "May";
-                int totalMonthMinutes = 43200;
-                day = ((totalMonthMinutes + arrivalTime)/60)/24+1;
+                day = ((totalMonthMinutes + arrivalTime)/minutesInAnHour)/hoursInADay+1;
             }
-            if ((arrivalTime >= 0) && (arrivalTime <= 43200))
+            if ((arrivalTime >= 0) && (arrivalTime <= totalMonthMinutes))
             {
                 month = "June";
-                day = (int)Math.floor(((arrivalTime)/60)/24)+1;
+                day = (int)Math.floor(((arrivalTime)/minutesInAnHour)/hoursInADay)+1;
             }
-            if ((arrivalTime > 43200))
+            if ((arrivalTime > totalMonthMinutes))
             {
                 month = "July";
-                day = (int)Math.floor(((arrivalTime)/60)/24)-29;
+                day = (int)Math.floor(((arrivalTime)/minutesInAnHour)/hoursInADay)-29;
             }
             if (delayInHours > 0)
             {
-                while (delayInHours > 24) {
-                    delayInHours = delayInHours - 24;
+                while (delayInHours > hoursInADay) {
+                    delayInHours = delayInHours - hoursInADay;
                 }
-                while ((arrivalTime > 60))
+                while ((arrivalTime > minutesInAnHour))
                 {
-                    arrivalTime = arrivalTime - 60;
+                    arrivalTime = arrivalTime - minutesInAnHour;
                 }
             }
             else
             {
                 while (delayInHours < 0) {
-                    delayInHours = delayInHours + 24;
+                    delayInHours = delayInHours + hoursInADay;
                 }
                 while ((arrivalTime < 0))
                 {
-                    arrivalTime = arrivalTime + 60;
+                    arrivalTime = arrivalTime + hoursInADay;
                 }
             }
-            if (delayInHours % 24 == 0)
+            if (delayInHours % hoursInADay == 0)
             {
-                delayInHours = 23;
+
+                delayInHours = hoursInADay - 1;
             }
             ship.setMonth(month);
-            hoursInADay = delayInHours;
-            minutesInADay = arrivalTime;
+            hours = delayInHours;
+            minutes = arrivalTime;
             ship.setDay(day);
-            ship.setH(hoursInADay);
-            ship.setM(minutesInADay);
+            ship.setH(hours);
+            ship.setM(minutes);
             int unloadingDelay = 1440;
             ship.setUnloadingTime(rand.nextInt(unloadingDelay) + ship.getUnloadingTime());
             schedule.add(ship);
         }
-        System.out.println("Iterations number: " + iterationsNumber);
+        System.out.println("Ships number: " + iterationsNumber);
         schedule.sort(Comparator.comparingInt(Ship::getArrivalTime));
         JSON jsonWriter = new JSON(schedule);
-        jsonWriter.addManually(schedule);
+        jsonWriter.addShip(schedule);
         jsonWriter.writeSchedule();
     }
 }

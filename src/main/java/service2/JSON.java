@@ -2,7 +2,6 @@ package service2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import service3.Cargo;
-import service3.CargoType;
 import service3.Ship;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -40,7 +39,7 @@ public class JSON {
         }
     }
 
-    public void addManually(List<Ship> schedule) {
+    public void addShip(List<Ship> schedule) {
         Scanner in = new Scanner(System.in);
         String userAnswer = "n";
         System.out.println("Add ship? y/n: ");
@@ -55,10 +54,10 @@ public class JSON {
                 int weightOrQuantity = in.nextInt();
                 System.out.println("Arrival time: ");
                 int arrivalTime = in.nextInt();
-                CargoType cargoType = switch (cargoTypeAsInt) {
-                    case 0 -> CargoType.LOOSE;
-                    case 1 -> CargoType.LIQUID;
-                    case 2 -> CargoType.CONTAINER;
+                Cargo.CargoType cargoType = switch (cargoTypeAsInt) {
+                    case 0 -> Cargo.CargoType.LOOSE;
+                    case 1 -> Cargo.CargoType.LIQUID;
+                    case 2 -> Cargo.CargoType.CONTAINER;
                     default -> throw new IllegalStateException("Unexpected value: " + cargoTypeAsInt);
                 };
                 int workingCranesPerformance = switch (cargoTypeAsInt) {

@@ -28,11 +28,18 @@ public class Cargo
     public static Cargo createCargo()
     {
         Random rand = new Random();
-        int maxWeightAmount = 100;
+        int maxWeightAmount = 300;
         CargoType[] types = CargoType.values();
         CargoType type = types[rand.nextInt(types.length)];
         int weightAmount = rand.nextInt(maxWeightAmount);
         Cargo cargo = new Cargo(type, weightAmount);
         return cargo;
+    }
+
+    public enum CargoType
+    {
+        LOOSE,
+        LIQUID,
+        CONTAINER
     }
 }
